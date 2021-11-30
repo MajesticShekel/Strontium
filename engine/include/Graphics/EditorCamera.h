@@ -80,6 +80,8 @@ namespace Strontium
     void onMouseScroll(MouseScrolledEvent &mouseEvent);
     void onWindowResize(WindowResizeEvent &windowEvent);
     void onKeyPress(KeyPressedEvent &keyEvent);
+    void onKeyRelease(KeyReleasedEvent& keyEvent);
+    void onKeyHeld(KeyHeldEvent& keyEvent);
 
     // Variables for camera position, front and top vectors.
     glm::vec3   position;

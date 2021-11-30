@@ -579,7 +579,7 @@ namespace Strontium
     {
       case SR_KEY_N:
       {
-        if (lControlHeld && keyEvent.getRepeatCount() == 0 && camStationary)
+        if (lControlHeld && camStationary)
         {
           auto storage = Renderer3D::getStorage();
           storage->currentEnvironment->unloadEnvironment();
@@ -592,7 +592,7 @@ namespace Strontium
       }
       case SR_KEY_O:
       {
-        if (lControlHeld && keyEvent.getRepeatCount() == 0 && camStationary)
+        if (lControlHeld && camStationary)
         {
           EventDispatcher* dispatcher = EventDispatcher::getInstance();
           dispatcher->queueEvent(new OpenDialogueEvent(DialogueEventType::FileOpen,
@@ -603,14 +603,14 @@ namespace Strontium
       }
       case SR_KEY_S:
       {
-        if (lControlHeld && lShiftHeld && keyEvent.getRepeatCount() == 0 && camStationary)
+        if (lControlHeld && lShiftHeld && camStationary)
         {
           EventDispatcher* dispatcher = EventDispatcher::getInstance();
           dispatcher->queueEvent(new OpenDialogueEvent(DialogueEventType::FileSave,
                                                        ".srn"));
           this->saveTarget = FileSaveTargets::TargetScene;
         }
-        else if (lControlHeld && keyEvent.getRepeatCount() == 0 && camStationary)
+        else if (lControlHeld && camStationary)
         {
           if (this->currentScene->getSaveFilepath() != "")
           {

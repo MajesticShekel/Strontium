@@ -100,13 +100,14 @@ namespace Strontium
       switch (action)
       {
         case GLFW_PRESS:
-          appEvents->queueEvent(new KeyPressedEvent(key, 0));
+          appEvents->queueEvent(new KeyPressedEvent(key));
+          appEvents->queueEvent(new KeyHeldEvent(key, 0));
           break;
         case GLFW_RELEASE:
           appEvents->queueEvent(new KeyReleasedEvent(key));
           break;
         case GLFW_REPEAT:
-          appEvents->queueEvent(new KeyPressedEvent(key, 1));
+          appEvents->queueEvent(new KeyHeldEvent(key, 1));
           break;
       }
     });

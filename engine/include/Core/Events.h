@@ -13,7 +13,7 @@ namespace Strontium
 {
   enum class EventType
   {
-    KeyPressedEvent, KeyReleasedEvent, KeyTypedEvent, MouseClickEvent,
+    KeyPressedEvent, KeyHeldEvent, KeyReleasedEvent, KeyTypedEvent, MouseClickEvent,
     MouseReleasedEvent, MouseScrolledEvent, WindowCloseEvent, WindowResizeEvent,
     OpenDialogueEvent, LoadFileEvent, SaveFileEvent, GuiEvent, EntitySwapEvent,
     EntityDeleteEvent
@@ -56,14 +56,28 @@ namespace Strontium
   class KeyPressedEvent : public Event
   {
   public:
-    KeyPressedEvent(const int keyCode, const uint repeat);
+    KeyPressedEvent(const int keyCode);
     ~KeyPressedEvent() = default;
 
     inline int getKeyCode() { return this->keyCode;}
-    inline uint getRepeatCount() { return this->numRepeat; }
   protected:
     int keyCode;
-    uint numRepeat;
+  };
+
+  //----------------------------------------------------------------------------
+  // The key held event.
+  //----------------------------------------------------------------------------
+  class KeyHeldEvent : public Event
+  {
+  public:
+      KeyHeldEvent(const int keyCode, const uint duration);
+      ~KeyHeldEvent() = default;
+
+      inline int getKeyCode() { return this->keyCode; }
+      inline uint getDuration() { return this->duration; }
+  protected:
+      int keyCode;
+      uint duration;
   };
 
   //----------------------------------------------------------------------------

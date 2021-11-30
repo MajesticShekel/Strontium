@@ -172,6 +172,13 @@ namespace Strontium
         break;
       case EventType::KeyPressedEvent:
         this->onKeyPress(*(static_cast<KeyPressedEvent*>(&event)));
+        break;
+      case EventType::KeyReleasedEvent:
+          this->onKeyRelease(*(static_cast<KeyReleasedEvent*>(&event)));
+          break;
+      case EventType::KeyHeldEvent:
+          this->onKeyHeld(*(static_cast<KeyHeldEvent*>(&event)));
+          break;
       default:
         break;
     }
@@ -212,6 +219,32 @@ namespace Strontium
 
     if (keyCode == SR_KEY_P && appWindow->isKeyPressed(SR_KEY_LEFT_ALT))
       this->swap();
+
+    if (keyCode == SR_KEY_LEFT_SHIFT && this->currentType == EditorCameraType::Free)
+        this->scalarSpeed *= 2.0;
+  }
+
+  void
+  EditorCamera::onKeyRelease(KeyReleasedEvent& keyEvent)
+  {
+      // Fetch the applocation window for input polling.
+      Shared<Window> appWindow = Application::getInstance()->getWindow();
+
+      int keyCode = keyEvent.getKeyCode();
+
+      if (keyCode == SR_KEY_LEFT_SHIFT && this->currentType == EditorCameraType::Free)
+          this->scalarSpeed /= 2.0;
+  }
+
+  void
+  EditorCamera::onKeyHeld(KeyHeldEvent& keyEvent)
+  {
+      // Fetch the applocation window for input polling.
+      Shared<Window> appWindow = Application::getInstance()->getWindow();
+
+      int keyCode = keyEvent.getKeyCode();
+
+      //none
   }
 
   // Swap the camera types.

@@ -13,10 +13,18 @@ namespace Strontium
   //----------------------------------------------------------------------------
   // Key pressed event.
   //----------------------------------------------------------------------------
-  KeyPressedEvent::KeyPressedEvent(const int keyCode, const uint repeat)
+  KeyPressedEvent::KeyPressedEvent(const int keyCode)
     : Event(EventType::KeyPressedEvent, "Key pressed event")
     , keyCode(keyCode)
-    , numRepeat(repeat)
+  { }
+
+  //----------------------------------------------------------------------------
+  // The key held event.
+  //----------------------------------------------------------------------------
+  KeyHeldEvent::KeyHeldEvent(const int keyCode, const uint duration)
+      : Event(EventType::KeyHeldEvent, "Key held event")
+      , keyCode(keyCode)
+      , duration(duration)
   { }
 
   //----------------------------------------------------------------------------
@@ -144,6 +152,9 @@ namespace Strontium
       {
         case EventType::KeyPressedEvent:
           delete static_cast<KeyPressedEvent*>(event);
+          break;
+        case EventType::KeyHeldEvent:
+          delete static_cast<KeyHeldEvent*>(event);
           break;
         case EventType::KeyReleasedEvent:
           delete static_cast<KeyReleasedEvent*>(event);

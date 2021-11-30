@@ -107,28 +107,28 @@ namespace Strontium
       case SR_KEY_Q:
       {
         // Stop using the Gizmo.
-        if (lControlHeld && keyEvent.getRepeatCount() == 0 && camStationary)
+        if (lControlHeld && camStationary)
           this->gizmoType = -1;
         break;
       }
       case SR_KEY_W:
       {
         // Translate.
-        if (lControlHeld && keyEvent.getRepeatCount() == 0 && camStationary)
+        if (lControlHeld && camStationary)
           this->gizmoType = ImGuizmo::TRANSLATE;
         break;
       }
       case SR_KEY_E:
       {
         // Rotate.
-        if (lControlHeld && keyEvent.getRepeatCount() == 0 && camStationary)
+        if (lControlHeld && camStationary)
           this->gizmoType = ImGuizmo::ROTATE;
         break;
       }
       case SR_KEY_R:
       {
         // Scale.
-        if (lControlHeld && keyEvent.getRepeatCount() == 0 && camStationary)
+        if (lControlHeld && camStationary)
           this->gizmoType = ImGuizmo::SCALE;
         break;
       }

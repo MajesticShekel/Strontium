@@ -20,9 +20,12 @@ namespace Strontium
                            const std::string &filepath);
     void serializePrefab(Entity prefab, const std::string &filepath,
                          const std::string &name = "Untitled Prefab");
+    void serializeAppStatus(std::map<std::string, uint> keybindings, const std::string& filepath,
+        const std::string& name);
 
     bool deserializeScene(Shared<Scene> scene, const std::string &filepath);
     bool deserializeMaterial(const std::string &filepath, AssetHandle &handle, bool override = false);
     bool deserializePrefab(Shared<Scene> scene, const std::string &filepath);
+    bool deserializeAppStatus(std::map<std::string, uint>& keybindings, const std::string& filepath);
   }
 }

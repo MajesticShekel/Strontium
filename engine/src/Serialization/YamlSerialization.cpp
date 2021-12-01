@@ -542,6 +542,23 @@ namespace Strontium
     }
 
     void
+    serializeAppStatus(std::map<std::string, uint> keybindings, const std::string& filepath,
+                    const std::string& name)
+    {
+        YAML::Emitter out;
+        out << YAML::BeginMap;
+
+        for (auto const& [key, val] : keybindings)
+            out << YAML::Key << key << YAML::Value << val;
+
+        out << YAML::EndMap;
+
+        std::ofstream output(filepath, std::ofstream::trunc | std::ofstream::out);
+        output << out.c_str();
+        output.close();
+    }
+
+    void
     deserializeMaterial(YAML::Node &mat, std::vector<std::string> &texturePaths,
                         bool override = false, const std::string &filepath = "")
     {
@@ -981,6 +998,19 @@ namespace Strontium
       }
       else
         return false;
+    }
+
+    bool
+    deserializeAppStatus(std::map<std::string, uint>& keybindings, const std::string& filepath)
+    {
+        YAML::Node data = YAML::LoadFile(filepath);
+
+        if (!data["Keybindings"])
+            return false;
+
+        //keybindings = data["Keybindings"].as
+
+        return true;
     }
   }
 }

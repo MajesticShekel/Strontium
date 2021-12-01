@@ -100,38 +100,31 @@ namespace Strontium
     int keyCode = keyEvent.getKeyCode();
 
     bool camStationary = this->parentLayer->getEditorCamera()->isStationary();
-    bool lControlHeld = appWindow->isKeyPressed(SR_KEY_LEFT_CONTROL);
+    bool lControlHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_CONTROL"]);
 
-    switch (keyCode)
+    if (keyCode == keyCodes["KEY_Q"])
     {
-      case SR_KEY_Q:
-      {
         // Stop using the Gizmo.
         if (lControlHeld && camStationary)
-          this->gizmoType = -1;
-        break;
-      }
-      case SR_KEY_W:
-      {
+            this->gizmoType = -1;
+    }
+    else if (keyCode == keyCodes["KEY_W"])
+    {
         // Translate.
         if (lControlHeld && camStationary)
-          this->gizmoType = ImGuizmo::TRANSLATE;
-        break;
-      }
-      case SR_KEY_E:
-      {
+            this->gizmoType = ImGuizmo::TRANSLATE;
+    }
+    else if (keyCode == keyCodes["KEY_E"])
+    {
         // Rotate.
         if (lControlHeld && camStationary)
-          this->gizmoType = ImGuizmo::ROTATE;
-        break;
-      }
-      case SR_KEY_R:
-      {
+            this->gizmoType = ImGuizmo::ROTATE;
+    }
+    else if (keyCode == keyCodes["KEY_R"])
+    {
         // Scale.
         if (lControlHeld && camStationary)
-          this->gizmoType = ImGuizmo::SCALE;
-        break;
-      }
+            this->gizmoType = ImGuizmo::SCALE;
     }
   }
 
@@ -144,16 +137,12 @@ namespace Strontium
     int mouseCode = mouseEvent.getButton();
 
     bool camStationary = this->parentLayer->getEditorCamera()->isStationary();
-    bool lControlHeld = appWindow->isKeyPressed(SR_KEY_LEFT_CONTROL);
+    bool lControlHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_CONTROL"]);
 
-    switch (mouseCode)
+    if (mouseCode == keyCodes["MOUSE_BUTTON_1"])
     {
-      case SR_MOUSE_BUTTON_1:
-      {
         if (lControlHeld && camStationary)
-          this->selectEntity();
-        break;
-      }
+            this->selectEntity();
     }
   }
 

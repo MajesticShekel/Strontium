@@ -115,24 +115,24 @@ namespace Strontium
         float cameraSpeed = this->scalarSpeed * dt;
 
         // Move the camera position (Space Engineers styled camera).
-        if (appWindow->isKeyPressed(SR_KEY_W))
+        if (appWindow->isKeyPressed(keyCodes["KEY_W"]))
           this->position += this->camFront * cameraSpeed;
 
-        if (appWindow->isKeyPressed(SR_KEY_S))
+        if (appWindow->isKeyPressed(keyCodes["KEY_S"]))
           this->position -= this->camFront * cameraSpeed;
 
-        if (appWindow->isKeyPressed(SR_KEY_A))
+        if (appWindow->isKeyPressed(keyCodes["KEY_A"]))
           this->position -= glm::normalize(glm::cross(this->camFront, this->camTop))
                             * cameraSpeed;
 
-        if (appWindow->isKeyPressed(SR_KEY_D))
+        if (appWindow->isKeyPressed(keyCodes["KEY_D"]))
           this->position += glm::normalize(glm::cross(this->camFront, this->camTop))
                             * cameraSpeed;
 
-        if (appWindow->isKeyPressed(SR_KEY_SPACE))
+        if (appWindow->isKeyPressed(keyCodes["KEY_SPACE"]))
           this->position += this->camTop * cameraSpeed;
 
-        if (appWindow->isKeyPressed(SR_KEY_LEFT_CONTROL))
+        if (appWindow->isKeyPressed(keyCodes["KEY_LEFT_CONTROL"]))
           this->position -= this->camTop * cameraSpeed;
         break;
       }
@@ -195,7 +195,7 @@ namespace Strontium
     switch (this->currentType)
     {
       case EditorCameraType::Stationary:
-        if (offsets.y != 0.0 && appWindow->isKeyPressed(SR_KEY_LEFT_ALT))
+        if (offsets.y != 0.0 && appWindow->isKeyPressed(keyCodes["KEY_LEFT_ALT"]))
           this->cameraZoom(offsets);
         break;
       default:
@@ -217,10 +217,10 @@ namespace Strontium
 
     int keyCode = keyEvent.getKeyCode();
 
-    if (keyCode == SR_KEY_P && appWindow->isKeyPressed(SR_KEY_LEFT_ALT))
+    if (keyCode == keyCodes["KEY_P"] && appWindow->isKeyPressed(keyCodes["KEY_LEFT_ALT"]))
       this->swap();
 
-    if (keyCode == SR_KEY_LEFT_SHIFT && this->currentType == EditorCameraType::Free)
+    if (keyCode == keyCodes["KEY_LEFT_SHIFT"] && this->currentType == EditorCameraType::Free)
         this->scalarSpeed *= 2.0;
   }
 
@@ -232,7 +232,7 @@ namespace Strontium
 
       int keyCode = keyEvent.getKeyCode();
 
-      if (keyCode == SR_KEY_LEFT_SHIFT && this->currentType == EditorCameraType::Free)
+      if (keyCode == keyCodes["KEY_LEFT_SHIFT"] && this->currentType == EditorCameraType::Free)
           this->scalarSpeed /= 2.0;
   }
 

@@ -4,6 +4,8 @@
 #include "Core/Events.h"
 #include "Core/Logs.h"
 #include "Utils/AsyncAssetLoading.h"
+#include "Serialization/YamlSerialization.h"
+#include "Core/KeyCodes.h"
 
 namespace Strontium
 {
@@ -172,8 +174,12 @@ namespace Strontium
     if (event.getType() == EventType::WindowResizeEvent)
       this->onWindowResize();
 
-    if (event.getType() == EventType::WindowCloseEvent)
-      this->close();
+    if (event.getType() == EventType::WindowCloseEvent) 
+    {
+        //TEMP
+        YAMLSerialization::serializeAppStatus(keyCodes, "appStatus.yaml", "appStatus.yaml");
+        this->close();
+    }
   }
 
   void

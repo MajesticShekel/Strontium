@@ -572,63 +572,57 @@ namespace Strontium
     int keyCode = keyEvent.getKeyCode();
 
     bool camStationary = this->editorCam->isStationary();
-    bool lControlHeld = appWindow->isKeyPressed(SR_KEY_LEFT_CONTROL);
-    bool lShiftHeld = appWindow->isKeyPressed(SR_KEY_LEFT_SHIFT);
+    bool lControlHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_CONTROL"]);
+    bool lShiftHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_SHIFT"]);
 
-    switch (keyCode)
+    if (keyCode == keyCodes["KEY_N"]) 
     {
-      case SR_KEY_N:
-      {
         if (lControlHeld && camStationary)
         {
-          auto storage = Renderer3D::getStorage();
-          storage->currentEnvironment->unloadEnvironment();
+            auto storage = Renderer3D::getStorage();
+            storage->currentEnvironment->unloadEnvironment();
 
-          this->currentScene = createShared<Scene>();
-          static_cast<SceneGraphWindow*>(this->windows[0])->setSelectedEntity(Entity());
-          static_cast<ModelWindow*>(this->windows[4])->setSelectedEntity(Entity());
+            this->currentScene = createShared<Scene>();
+            static_cast<SceneGraphWindow*>(this->windows[0])->setSelectedEntity(Entity());
+            static_cast<ModelWindow*>(this->windows[4])->setSelectedEntity(Entity());
         }
-        break;
-      }
-      case SR_KEY_O:
-      {
+    }
+    else if (keyCode == keyCodes["KEY_O"])
+    {
         if (lControlHeld && camStationary)
         {
-          EventDispatcher* dispatcher = EventDispatcher::getInstance();
-          dispatcher->queueEvent(new OpenDialogueEvent(DialogueEventType::FileOpen,
-                                                       ".srn"));
-          this->loadTarget = FileLoadTargets::TargetScene;
+            EventDispatcher* dispatcher = EventDispatcher::getInstance();
+            dispatcher->queueEvent(new OpenDialogueEvent(DialogueEventType::FileOpen,
+                ".srn"));
+            this->loadTarget = FileLoadTargets::TargetScene;
         }
-        break;
-      }
-      case SR_KEY_S:
-      {
+    }
+    else if (keyCode == keyCodes["KEY_S"])
+    {
         if (lControlHeld && lShiftHeld && camStationary)
         {
-          EventDispatcher* dispatcher = EventDispatcher::getInstance();
-          dispatcher->queueEvent(new OpenDialogueEvent(DialogueEventType::FileSave,
-                                                       ".srn"));
-          this->saveTarget = FileSaveTargets::TargetScene;
+            EventDispatcher* dispatcher = EventDispatcher::getInstance();
+            dispatcher->queueEvent(new OpenDialogueEvent(DialogueEventType::FileSave,
+                ".srn"));
+            this->saveTarget = FileSaveTargets::TargetScene;
         }
         else if (lControlHeld && camStationary)
         {
-          if (this->currentScene->getSaveFilepath() != "")
-          {
-            std::string path =  this->currentScene->getSaveFilepath();
-            std::string name = path.substr(path.find_last_of('/') + 1, path.find_last_of('.'));
+            if (this->currentScene->getSaveFilepath() != "")
+            {
+                std::string path = this->currentScene->getSaveFilepath();
+                std::string name = path.substr(path.find_last_of('/') + 1, path.find_last_of('.'));
 
-            YAMLSerialization::serializeScene(this->currentScene, path, name);
-          }
-          else
-          {
-            EventDispatcher* dispatcher = EventDispatcher::getInstance();
-            dispatcher->queueEvent(new OpenDialogueEvent(DialogueEventType::FileSave,
-                                                         ".srn"));
-            this->saveTarget = FileSaveTargets::TargetScene;
-          }
+                YAMLSerialization::serializeScene(this->currentScene, path, name);
+            }
+            else
+            {
+                EventDispatcher* dispatcher = EventDispatcher::getInstance();
+                dispatcher->queueEvent(new OpenDialogueEvent(DialogueEventType::FileSave,
+                    ".srn"));
+                this->saveTarget = FileSaveTargets::TargetScene;
+            }
         }
-        break;
-      }
     }
   }
 
@@ -640,8 +634,8 @@ namespace Strontium
     int mouseCode = mouseEvent.getButton();
 
     bool camStationary = this->editorCam->isStationary();
-    bool lControlHeld = appWindow->isKeyPressed(SR_KEY_LEFT_CONTROL);
-    bool lShiftHeld = appWindow->isKeyPressed(SR_KEY_LEFT_SHIFT);
+    bool lControlHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_CONTROL"]);
+    bool lShiftHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_SHIFT"]);
 
     switch (mouseCode)
     {

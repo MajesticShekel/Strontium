@@ -8,7 +8,7 @@ namespace Strontium
     , format(".")
     , mode(imgui_addons::ImGuiFileBrowser::DialogMode::SELECT)
   {
-
+      name = "FileBrowserWindow";
   }
 
   FileBrowserWindow::~FileBrowserWindow()

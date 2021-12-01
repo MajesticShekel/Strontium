@@ -15,7 +15,9 @@ namespace Strontium
     : GuiWindow(parentLayer)
     , selectedShader(nullptr)
     , shaderName("")
-  { }
+  { 
+      name = "ShaderWindow";
+  }
 
   ShaderWindow::~ShaderWindow()
   { }

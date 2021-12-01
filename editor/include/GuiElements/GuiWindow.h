@@ -32,6 +32,7 @@ namespace Strontium
     virtual void onUpdate(float dt, Shared<Scene> activeScene);
     virtual void onEvent(Event &event);
 
+    std::string name;
     bool isOpen;
   protected:
     EditorLayer* parentLayer;

@@ -25,6 +25,8 @@ namespace Strontium
     this->icons.insert({ "srfile", tex });
     tex = Texture2D::loadTexture2D("./assets/.icons/sfabfile.png", Texture2DParams(), false);
     this->icons.insert({ "sfabfile", tex });
+
+    name = "AssetBrowserWindow";
   }
 
   AssetBrowserWindow::~AssetBrowserWindow()

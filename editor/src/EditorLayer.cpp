@@ -3,7 +3,7 @@
 // Project includes.
 #include "Core/Application.h"
 #include "Core/Logs.h"
-#include "Core/KeyCodes.h"
+#include "Core/AppStatus.h"
 #include "GuiElements/Styles.h"
 #include "GuiElements/Panels.h"
 #include "Serialization/YamlSerialization.h"
@@ -37,6 +37,7 @@ namespace Strontium
   EditorLayer::onAttach()
   {
     Styles::setDefaultTheme();
+    YAMLSerialization::deserializeAppStatus(editorStatus, "appStatus.yaml");
 
     // Fetch the width and height of the window and create a floating point
     // framebuffer.
@@ -78,7 +79,23 @@ namespace Strontium
   void
   EditorLayer::onDetach()
   {
-
+      //TEMP
+      for (GuiWindow* window : windows) {
+          if (editorStatus.windows.find(window->name) != editorStatus.windows.end())
+              editorStatus.windows[window->name] = window->isOpen;
+          else
+              editorStatus.windows.insert(std::pair{ window->name, window->isOpen });
+      }
+      {
+          editorStatus.camera.position = editorCam->getCamPos();
+          editorStatus.camera.front = editorCam->getCamFront();
+          editorStatus.camera.fov = editorCam->getHorFOV();
+          editorStatus.camera.near = editorCam->getNear();
+          editorStatus.camera.far = editorCam->getFar();
+          editorStatus.camera.speed = editorCam->getSpeed();
+          editorStatus.camera.sens = editorCam->getSens();
+      }
+      YAMLSerialization::serializeAppStatus(editorStatus, "appStatus.yaml");
   }
 
   // On event for the layer.
@@ -572,10 +589,10 @@ namespace Strontium
     int keyCode = keyEvent.getKeyCode();
 
     bool camStationary = this->editorCam->isStationary();
-    bool lControlHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_CONTROL"]);
-    bool lShiftHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_SHIFT"]);
+    bool lControlHeld = appWindow->isKeyPressed(editorStatus.keyCodes["KEY_LEFT_CONTROL"]);
+    bool lShiftHeld = appWindow->isKeyPressed(editorStatus.keyCodes["KEY_LEFT_SHIFT"]);
 
-    if (keyCode == keyCodes["KEY_N"]) 
+    if (keyCode == editorStatus.keyCodes["KEY_N"]) 
     {
         if (lControlHeld && camStationary)
         {
@@ -587,7 +604,7 @@ namespace Strontium
             static_cast<ModelWindow*>(this->windows[4])->setSelectedEntity(Entity());
         }
     }
-    else if (keyCode == keyCodes["KEY_O"])
+    else if (keyCode == editorStatus.keyCodes["KEY_O"])
     {
         if (lControlHeld && camStationary)
         {
@@ -597,7 +614,7 @@ namespace Strontium
             this->loadTarget = FileLoadTargets::TargetScene;
         }
     }
-    else if (keyCode == keyCodes["KEY_S"])
+    else if (keyCode == editorStatus.keyCodes["KEY_S"])
     {
         if (lControlHeld && lShiftHeld && camStationary)
         {
@@ -634,8 +651,8 @@ namespace Strontium
     int mouseCode = mouseEvent.getButton();
 
     bool camStationary = this->editorCam->isStationary();
-    bool lControlHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_CONTROL"]);
-    bool lShiftHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_SHIFT"]);
+    bool lControlHeld = appWindow->isKeyPressed(editorStatus.keyCodes["KEY_LEFT_CONTROL"]);
+    bool lShiftHeld = appWindow->isKeyPressed(editorStatus.keyCodes["KEY_LEFT_SHIFT"]);
 
     switch (mouseCode)
     {

@@ -569,31 +569,31 @@ namespace Strontium
     // Display components here.
     if (entity.hasComponent<TransformComponent>())
     {
-      ImGui::TreeNodeEx("Transform Componenet", leafFlag);
+      ImGui::TreeNodeEx("Transform Component", leafFlag);
     }
     if (entity.hasComponent<RenderableComponent>())
     {
-      ImGui::TreeNodeEx("Renderable Componenet", leafFlag);
+      ImGui::TreeNodeEx("Renderable Component", leafFlag);
     }
     if (entity.hasComponent<CameraComponent>())
     {
-      ImGui::TreeNodeEx("Camera Componenet", leafFlag);
+      ImGui::TreeNodeEx("Camera Component", leafFlag);
     }
     if (entity.hasComponent<DirectionalLightComponent>())
     {
-      ImGui::TreeNodeEx("Directional Light Componenet", leafFlag);
+      ImGui::TreeNodeEx("Directional Light Component", leafFlag);
     }
     if (entity.hasComponent<PointLightComponent>())
     {
-      ImGui::TreeNodeEx("Point Light Componenet", leafFlag);
+      ImGui::TreeNodeEx("Point Light Component", leafFlag);
     }
     if (entity.hasComponent<SpotLightComponent>())
     {
-      ImGui::TreeNodeEx("Spot Light Componenet", leafFlag);
+      ImGui::TreeNodeEx("Spot Light Component", leafFlag);
     }
     if (entity.hasComponent<AmbientComponent>())
     {
-      ImGui::TreeNodeEx("Ambient Light Componenet", leafFlag);
+      ImGui::TreeNodeEx("Ambient Light Component", leafFlag);
     }
   }
 

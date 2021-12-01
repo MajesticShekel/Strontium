@@ -542,14 +542,42 @@ namespace Strontium
     }
 
     void
-    serializeAppStatus(std::map<std::string, uint> keybindings, const std::string& filepath,
-                    const std::string& name)
+    serializeAppStatus(appStatus status, const std::string& filepath)
     {
+        //update status of status
+        //for ()
+
         YAML::Emitter out;
         out << YAML::BeginMap;
 
-        for (auto const& [key, val] : keybindings)
+        out << YAML::Key << "Keybindings";
+        out << YAML::BeginMap;
+        for (auto const& [key, val] : status.keyCodes)
             out << YAML::Key << key << YAML::Value << val;
+        out << YAML::EndMap;
+
+        if (!status.windows.empty())
+        {
+            out << YAML::Key << "Window State";
+            out << YAML::BeginMap;
+            for (auto const& [key, val] : status.windows)
+                out << YAML::Key << key << YAML::Value << val;
+            out << YAML::EndMap;
+        }
+
+        if (editorStatus.camera.near != NULL)
+        {
+            out << YAML::Key << "Editor Camera Settings";
+            out << YAML::BeginMap;
+            out << YAML::Key << "Position" << YAML::Value << editorStatus.camera.position;
+            out << YAML::Key << "Front" << YAML::Value << editorStatus.camera.front;
+            out << YAML::Key << "FOV" << YAML::Value << editorStatus.camera.fov;
+            out << YAML::Key << "Near" << YAML::Value << editorStatus.camera.near;
+            out << YAML::Key << "Far" << YAML::Value << editorStatus.camera.far;
+            out << YAML::Key << "Speed" << YAML::Value << editorStatus.camera.speed;
+            out << YAML::Key << "Sensitivity" << YAML::Value << editorStatus.camera.sens;
+            out << YAML::EndMap;
+        }
 
         out << YAML::EndMap;
 
@@ -1001,14 +1029,46 @@ namespace Strontium
     }
 
     bool
-    deserializeAppStatus(std::map<std::string, uint>& keybindings, const std::string& filepath)
+    deserializeAppStatus(appStatus& status, const std::string& filepath)
     {
-        YAML::Node data = YAML::LoadFile(filepath);
+        YAML::Node data;
+        try {
+            data = YAML::LoadFile(filepath);
+        }
+        catch (std::exception& e)
+        {
+            std::cout << "The specified file does not exist.\n";
+            status = defaultEditorStatus;
+            serializeAppStatus(status, filepath);
+            return 0;
+        }
 
         if (!data["Keybindings"])
-            return false;
+            status.keyCodes = defaultEditorStatus.keyCodes;
 
-        //keybindings = data["Keybindings"].as
+        for (const auto& line : data["Keybindings"])
+          status.keyCodes[line.first.as<std::string>()] = line.second.as<uint>();
+
+        //no defaults for windows
+        for (const auto& line : data["Window State"])
+        {
+            if (status.windows.find(line.first.as<std::string>()) != status.windows.end())
+                status.windows[line.first.as<std::string>()] = line.second.as<bool>();
+            else
+                status.windows.insert(std::pair{ line.first.as<std::string>(), line.second.as<bool>() });
+        }
+            
+        //camera settings
+        if (data["Editor Camera Settings"])
+        {
+            editorStatus.camera.position = data["Editor Camera Settings"]["Position"].as<glm::vec3>();
+            editorStatus.camera.front = data["Editor Camera Settings"]["Front"].as<glm::vec3>();
+            editorStatus.camera.fov = data["Editor Camera Settings"]["FOV"].as<float>();
+            editorStatus.camera.near = data["Editor Camera Settings"]["Near"].as<float>();
+            editorStatus.camera.far = data["Editor Camera Settings"]["Far"].as<float>();
+            editorStatus.camera.speed = data["Editor Camera Settings"]["Speed"].as<float>();
+            editorStatus.camera.sens = data["Editor Camera Settings"]["Sensitivity"].as<float>();
+        }
 
         return true;
     }

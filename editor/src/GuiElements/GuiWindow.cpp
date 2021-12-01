@@ -5,7 +5,9 @@ namespace Strontium
   GuiWindow::GuiWindow(EditorLayer* parentLayer, bool isOpen)
     : parentLayer(parentLayer)
     , isOpen(isOpen)
-  { }
+  { 
+      name = "GuiWindow";
+  }
 
   GuiWindow::~GuiWindow()
   { }

@@ -13,7 +13,9 @@ namespace Strontium
   CameraWindow::CameraWindow(EditorLayer* parentLayer, Shared<EditorCamera> camera)
     : GuiWindow(parentLayer)
     , camera(camera)
-  { }
+  {
+      name = "CameraWindow";
+  }
 
   CameraWindow::~CameraWindow()
   { }

@@ -12,7 +12,9 @@ namespace Strontium
 {
   RendererWindow::RendererWindow(EditorLayer* parentLayer)
     : GuiWindow(parentLayer)
-  { }
+  { 
+      name = "RendererWindow";
+  }
 
   RendererWindow::~RendererWindow()
   { }

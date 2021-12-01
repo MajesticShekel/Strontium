@@ -2,7 +2,7 @@
 
 // Project includes.
 #include "Core/Application.h"
-#include "Core/KeyCodes.h"
+#include "Core/AppStatus.h"
 #include "EditorLayer.h"
 #include "Scenes/Components.h"
 #include "GuiElements/Styles.h"
@@ -22,7 +22,9 @@ namespace Strontium
     , gizmoType(-1)
     , gizmoSelPos(-1.0f, -1.0f)
     , selectorSize(0.0f, 0.0f)
-  { }
+  { 
+      name = "ViewportWindow";
+  }
 
   void
   ViewportWindow::onImGuiRender(bool &isOpen, Shared<Scene> activeScene)
@@ -100,27 +102,27 @@ namespace Strontium
     int keyCode = keyEvent.getKeyCode();
 
     bool camStationary = this->parentLayer->getEditorCamera()->isStationary();
-    bool lControlHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_CONTROL"]);
+    bool lControlHeld = appWindow->isKeyPressed(editorStatus.keyCodes["KEY_LEFT_CONTROL"]);
 
-    if (keyCode == keyCodes["KEY_Q"])
+    if (keyCode == editorStatus.keyCodes["KEY_Q"])
     {
         // Stop using the Gizmo.
         if (lControlHeld && camStationary)
             this->gizmoType = -1;
     }
-    else if (keyCode == keyCodes["KEY_W"])
+    else if (keyCode == editorStatus.keyCodes["KEY_W"])
     {
         // Translate.
         if (lControlHeld && camStationary)
             this->gizmoType = ImGuizmo::TRANSLATE;
     }
-    else if (keyCode == keyCodes["KEY_E"])
+    else if (keyCode == editorStatus.keyCodes["KEY_E"])
     {
         // Rotate.
         if (lControlHeld && camStationary)
             this->gizmoType = ImGuizmo::ROTATE;
     }
-    else if (keyCode == keyCodes["KEY_R"])
+    else if (keyCode == editorStatus.keyCodes["KEY_R"])
     {
         // Scale.
         if (lControlHeld && camStationary)
@@ -137,9 +139,9 @@ namespace Strontium
     int mouseCode = mouseEvent.getButton();
 
     bool camStationary = this->parentLayer->getEditorCamera()->isStationary();
-    bool lControlHeld = appWindow->isKeyPressed(keyCodes["KEY_LEFT_CONTROL"]);
+    bool lControlHeld = appWindow->isKeyPressed(editorStatus.keyCodes["KEY_LEFT_CONTROL"]);
 
-    if (mouseCode == keyCodes["MOUSE_BUTTON_1"])
+    if (mouseCode == editorStatus.keyCodes["MOUSE_BUTTON_1"])
     {
         if (lControlHeld && camStationary)
             this->selectEntity();

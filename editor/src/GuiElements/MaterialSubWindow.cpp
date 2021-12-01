@@ -131,7 +131,9 @@ namespace Strontium
   MaterialSubWindow::MaterialSubWindow(EditorLayer* parentLayer)
     : GuiWindow(parentLayer, false)
     , fileLoadTargets(FileLoadTargets::TargetNone)
-  { }
+  { 
+      name = "MaterialSubWindow";
+  }
 
   MaterialSubWindow::~MaterialSubWindow()
   { }

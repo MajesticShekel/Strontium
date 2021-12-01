@@ -21,7 +21,9 @@ namespace Strontium
     , selectedNode(nullptr)
     , selectedAniNode(nullptr)
     , selectedSubMesh(nullptr)
-  { }
+  { 
+      name = "ModelWindow";
+  }
 
   ModelWindow::~ModelWindow()
   { }

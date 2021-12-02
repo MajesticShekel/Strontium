@@ -61,6 +61,8 @@ namespace Strontium
     float& getSpeed() { return this->scalarSpeed; }
     float& getSens() { return this->sensitivity; }
 
+    void saveSettings();
+
     operator Camera()
     {
       Camera outCam;

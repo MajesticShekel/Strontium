@@ -44,6 +44,8 @@ namespace Strontium
     Entity getSelectedEntity();
     SceneState getSceneState() { return this->sceneState; }
     std::string& getDNDScenePath() { return this->dndScenePath; }
+
+    void saveWindows();
   protected:
     // Handle keyboard/mouse events.
     void onKeyPressEvent(KeyPressedEvent &keyEvent);

@@ -177,7 +177,7 @@ namespace Strontium
     if (event.getType() == EventType::WindowCloseEvent) 
     {
         //TEMP
-        YAMLSerialization::serializeAppStatus(editorStatus, "appStatus.yaml");
+        YAMLSerialization::serializeAppStatus(editorStatus, CONFIG_FILEPATH);
         this->close();
     }
   }

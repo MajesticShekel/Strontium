@@ -544,9 +544,6 @@ namespace Strontium
     void
     serializeAppStatus(appStatus status, const std::string& filepath)
     {
-        //update status of status
-        //for ()
-
         YAML::Emitter out;
         out << YAML::BeginMap;
 
@@ -565,10 +562,23 @@ namespace Strontium
             out << YAML::EndMap;
         }
 
-        if (editorStatus.camera.near != NULL)
+        if (editorStatus.camera.near != NULL) //<- cam settings are all-or-nothing
         {
             out << YAML::Key << "Editor Camera Settings";
             out << YAML::BeginMap;
+
+            /*for (auto const& [key, val] : status.camera.toMap())
+            {
+                try
+                {
+                    out << YAML::Key << key << YAML::Value << std::any_cast<int>(val);
+                }
+                catch (std::exception& e)
+                {
+                    out << YAML::Key << key << YAML::Value << std::any_cast<glm::vec3>(val);
+                }
+            }*/
+
             out << YAML::Key << "Position" << YAML::Value << editorStatus.camera.position;
             out << YAML::Key << "Front" << YAML::Value << editorStatus.camera.front;
             out << YAML::Key << "FOV" << YAML::Value << editorStatus.camera.fov;
@@ -1043,13 +1053,15 @@ namespace Strontium
             return 0;
         }
 
+        //KEYBINDINGS
         if (!data["Keybindings"])
             status.keyCodes = defaultEditorStatus.keyCodes;
-
         for (const auto& line : data["Keybindings"])
           status.keyCodes[line.first.as<std::string>()] = line.second.as<uint>();
 
-        //no defaults for windows
+        //WINDOWS
+        if (!data["Window State"])
+            editorStatus.windows = defaultEditorStatus.windows;
         for (const auto& line : data["Window State"])
         {
             if (status.windows.find(line.first.as<std::string>()) != status.windows.end())
@@ -1058,17 +1070,35 @@ namespace Strontium
                 status.windows.insert(std::pair{ line.first.as<std::string>(), line.second.as<bool>() });
         }
             
-        //camera settings
+        //EDITOR CAMERA SETTINGS
         if (data["Editor Camera Settings"])
         {
-            editorStatus.camera.position = data["Editor Camera Settings"]["Position"].as<glm::vec3>();
-            editorStatus.camera.front = data["Editor Camera Settings"]["Front"].as<glm::vec3>();
-            editorStatus.camera.fov = data["Editor Camera Settings"]["FOV"].as<float>();
-            editorStatus.camera.near = data["Editor Camera Settings"]["Near"].as<float>();
-            editorStatus.camera.far = data["Editor Camera Settings"]["Far"].as<float>();
-            editorStatus.camera.speed = data["Editor Camera Settings"]["Speed"].as<float>();
-            editorStatus.camera.sens = data["Editor Camera Settings"]["Sensitivity"].as<float>();
+            //can I check for each field of editorStatus.camera with templates?
+            const auto& cam = data["Editor Camera Settings"];
+            (cam["Position"]) ?
+                editorStatus.camera.position = cam["Position"].as<glm::vec3>()
+                : editorStatus.camera.position = defaultEditorStatus.camera.position;
+            (cam["Front"]) ?
+                editorStatus.camera.front = cam["Front"].as<glm::vec3>()
+                : editorStatus.camera.front = defaultEditorStatus.camera.front;
+            (cam["FOV"]) ?
+                editorStatus.camera.fov = cam["FOV"].as<float>()
+                : editorStatus.camera.fov = defaultEditorStatus.camera.fov;
+            (cam["Near"]) ?
+                editorStatus.camera.near = cam["Near"].as<float>()
+                : editorStatus.camera.near = defaultEditorStatus.camera.near;
+            (cam["Far"]) ?
+                editorStatus.camera.far = cam["Far"].as<float>()
+                : editorStatus.camera.far = defaultEditorStatus.camera.far;
+            (cam["Speed"]) ?
+                editorStatus.camera.speed = cam["Speed"].as<float>()
+                : editorStatus.camera.speed = defaultEditorStatus.camera.speed;
+            (cam["Sensitivity"]) ?
+                editorStatus.camera.sens = cam["Sensitivity"].as<float>()
+                : editorStatus.camera.sens = defaultEditorStatus.camera.sens;
         }
+        else
+            editorStatus.camera = defaultEditorStatus.camera;
 
         return true;
     }

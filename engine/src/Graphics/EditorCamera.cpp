@@ -310,4 +310,14 @@ namespace Strontium
   {
     return this->camFront;
   }
+  void EditorCamera::saveSettings()
+  {
+      editorStatus.camera.position = position;
+      editorStatus.camera.front = camFront;
+      editorStatus.camera.fov = horFOV;
+      editorStatus.camera.near = near;
+      editorStatus.camera.far = far;
+      editorStatus.camera.speed = scalarSpeed;
+      editorStatus.camera.sens = sensitivity;
+  }
 }

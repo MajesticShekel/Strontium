@@ -15,6 +15,16 @@
 // ImGizmo goodies.
 #include "imguizmo/ImGuizmo.h"
 
+#define SCENE_GRAPH  0
+#define CAMERA_MENU  1
+#define SHADER_MENU  2
+#define FILE_BROWSER  3
+#define MODEL_INFO  4
+#define CONTENT_BROWSER  5
+#define RENDERER_SETTINGS  6
+#define VIEWPORT_MENU  7
+#define APP_SETTINGS_WINDOW 8
+
 namespace Strontium
 {
   EditorLayer::EditorLayer()
@@ -37,7 +47,7 @@ namespace Strontium
   EditorLayer::onAttach()
   {
     Styles::setDefaultTheme();
-    YAMLSerialization::deserializeAppStatus(editorStatus, "appStatus.yaml");
+    YAMLSerialization::deserializeAppStatus(editorStatus, CONFIG_FILEPATH);
 
     // Fetch the width and height of the window and create a floating point
     // framebuffer.
@@ -74,28 +84,15 @@ namespace Strontium
     this->windows.push_back(new AssetBrowserWindow(this));
     this->windows.push_back(new RendererWindow(this)); // 6
     this->windows.push_back(new ViewportWindow(this));
+    this->windows.push_back(new AppSettingsWindow(this));
   }
 
   void
   EditorLayer::onDetach()
   {
-      //TEMP
-      for (GuiWindow* window : windows) {
-          if (editorStatus.windows.find(window->name) != editorStatus.windows.end())
-              editorStatus.windows[window->name] = window->isOpen;
-          else
-              editorStatus.windows.insert(std::pair{ window->name, window->isOpen });
-      }
-      {
-          editorStatus.camera.position = editorCam->getCamPos();
-          editorStatus.camera.front = editorCam->getCamFront();
-          editorStatus.camera.fov = editorCam->getHorFOV();
-          editorStatus.camera.near = editorCam->getNear();
-          editorStatus.camera.far = editorCam->getFar();
-          editorStatus.camera.speed = editorCam->getSpeed();
-          editorStatus.camera.sens = editorCam->getSens();
-      }
-      YAMLSerialization::serializeAppStatus(editorStatus, "appStatus.yaml");
+      saveWindows();
+      editorCam->saveSettings();
+      YAMLSerialization::serializeAppStatus(editorStatus, CONFIG_FILEPATH);
   }
 
   // On event for the layer.
@@ -391,12 +388,12 @@ namespace Strontium
           {
             if (ImGui::MenuItem("Show Scene Graph"))
             {
-              this->windows[0]->isOpen = true;
+              this->windows[SCENE_GRAPH]->isOpen = true;
             }
 
             if (ImGui::MenuItem("Show Model Information"))
             {
-              this->windows[4]->isOpen = true;
+              this->windows[MODEL_INFO]->isOpen = true;
             }
 
             ImGui::EndMenu();
@@ -406,7 +403,7 @@ namespace Strontium
           {
             if (ImGui::MenuItem("Show Content Browser"))
             {
-              this->windows[5]->isOpen = true;
+              this->windows[CONTENT_BROWSER]->isOpen = true;
             }
 
             if (ImGui::MenuItem("Show Performance Stats Menu"))
@@ -416,12 +413,12 @@ namespace Strontium
 
             if (ImGui::MenuItem("Show Camera Menu"))
             {
-              this->windows[1]->isOpen = true;
+              this->windows[CAMERA_MENU]->isOpen = true;
             }
 
             if (ImGui::MenuItem("Show Shader Menu"))
             {
-              this->windows[2]->isOpen = true;
+              this->windows[SHADER_MENU]->isOpen = true;
             }
 
             ImGui::EndMenu();
@@ -429,10 +426,25 @@ namespace Strontium
 
           if (ImGui::MenuItem("Show Renderer Settings"))
           {
-            this->windows[6]->isOpen = true;
+            this->windows[RENDERER_SETTINGS]->isOpen = true;
           }
 
           ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("System Settings"))
+        {
+            if (ImGui::MenuItem("Keybindings"))
+            {
+                this->windows[APP_SETTINGS_WINDOW]->isOpen = true;
+            }
+            if (ImGui::MenuItem("Save Settings"))
+            {
+                saveWindows();
+                editorCam->saveSettings();
+                YAMLSerialization::serializeAppStatus(editorStatus, CONFIG_FILEPATH);
+            }
+            ImGui::EndMenu();
         }
 
         ImGui::EndMenu();
@@ -578,6 +590,16 @@ namespace Strontium
 
     // MUST KEEP THIS. Docking window end.
     ImGui::End();
+  }
+
+  void EditorLayer::saveWindows()
+  {
+      for (GuiWindow* window : windows) {
+          if (editorStatus.windows.find(window->name) != editorStatus.windows.end())
+              editorStatus.windows[window->name] = window->isOpen;
+          else
+              editorStatus.windows.insert(std::pair{ window->name, window->isOpen });
+      }
   }
 
   void

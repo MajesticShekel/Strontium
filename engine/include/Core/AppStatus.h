@@ -1,10 +1,15 @@
 #pragma once
 
 #include <Core/ApplicationBase.h>
+//#include <any>
+
+#define CONFIG_FILEPATH "appStatus.yaml"
 
 struct camData {
 	glm::vec3 position, front;
 	float fov, near, far, speed, sens;
+	//std::map<std::string, std::pair<std::any, std::string>> toMap(); //EDIT WHEN YOU ADD VARS
+	//^ should this be inline? ^
 };
 
 struct appStatus {
